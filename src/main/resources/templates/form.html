@@ -12,7 +12,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">FacturasApp</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -32,24 +32,20 @@
     <h1 class="text-secondary text-center border border-secondary" th:text="${titulo}">Insert title</h1>
 
     <form th:action="@{/form}" th:object="${cliente}" method="POST">
-        <table>
             <input type="hidden" th:field="*{id}"/>
-            <tr>
-                <td>Nombre</td>
-                <td><input type="text" th:field="*{nombre}" class="form-control"/></td>
-            </tr>
-            <tr>
-                <td>Apellido</td>
-                <td><input type="text" th:field="*{apellido}" class="form-control"/></td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td><input type="email" th:field="*{email}" class="form-control"/></td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="Crear cliente" class="btn btn-primary"/></td>
-            </tr>
-        </table>
+
+            <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
+                <div class="col-sm-6"><input type="text" class="form-control" th:field="*{nombre}"></div>
+            </div>
+            <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
+                <div class="col-sm-6"><input type="text" class="form-control" th:field="*{apellido}"></div>
+            </div>
+            <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-6"><input type="text" class="form-control" th:field="*{email}"></div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6"><input type="submit" class="btn btn-primary" value="Crear cliente"></div>
+            </div>
     </form>
 </div>
 
