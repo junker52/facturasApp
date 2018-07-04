@@ -5,9 +5,11 @@ import com.learning.facturas.app.models.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 
@@ -36,7 +38,10 @@ public class ClienteController {
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public String guardar(Cliente cliente){
+    public String guardar(@Valid Cliente cliente, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return "form";
+        }
         this.clienteDAO.save(cliente);
         return "redirect:listar";
     }

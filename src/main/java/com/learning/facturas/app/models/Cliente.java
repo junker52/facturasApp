@@ -1,8 +1,13 @@
 package com.learning.facturas.app.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.thymeleaf.util.DateUtils;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -17,12 +22,18 @@ public class Cliente implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
     private String nombre;
+    @NotEmpty
     private String apellido;
+    @NotEmpty
+    @Email
     private String email;
 
     @Column(name = "create_at", nullable = false)
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    @NotNull
     private Date createAt;
 
     public Long getId() {
@@ -65,8 +76,10 @@ public class Cliente implements Serializable {
         this.createAt = createAt;
     }
 
+    /*
     @PrePersist
     public void prePersist(){
-        createAt = new Date();
+            createAt = new Date();
     }
+    */
 }
