@@ -2,6 +2,7 @@ package com.learning.facturas.app.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -62,5 +63,10 @@ public class Cliente implements Serializable {
 
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        createAt = new Date();
     }
 }
