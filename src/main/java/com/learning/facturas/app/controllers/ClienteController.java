@@ -1,6 +1,6 @@
 package com.learning.facturas.app.controllers;
 
-import com.learning.facturas.app.dao.ClienteDAO;
+import com.learning.facturas.app.com.learning.facturas.app.services.ClienteService;
 import com.learning.facturas.app.models.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,12 +24,12 @@ import java.util.Map;
 public class ClienteController {
 
     @Autowired
-    private ClienteDAO clienteDAO;
+    private ClienteService clienteService;
 
     @RequestMapping(value = "/listar", method = RequestMethod.GET)
     public String listar(Model model){
         model.addAttribute("titulo","Listado de Clientes");
-        model.addAttribute("clientes",this.clienteDAO.findAll());
+        model.addAttribute("clientes",this.clienteService.findAll());
         return "listar";
     }
 
@@ -47,7 +47,7 @@ public class ClienteController {
             model.addAttribute("titulo","Formulario de cliente");
             return "form";
         }
-        this.clienteDAO.save(cliente);
+        this.clienteService.save(cliente);
         sessionStatus.setComplete();
         return "redirect:listar";
     }
@@ -56,7 +56,7 @@ public class ClienteController {
     public String editar(@PathVariable(value = "id") Long id, Model model){
         Cliente cliente = null;
         if (id > 0){
-            cliente = this.clienteDAO.findOne(id);
+            cliente = this.clienteService.findOne(id);
         } else {
             model.addAttribute("titulo","Listado de Clientes");
             return "redirect:/listar";
@@ -69,7 +69,7 @@ public class ClienteController {
     @RequestMapping(value = "/delete/{id}")
     public String eliminar(@PathVariable(value = "id") Long id){
         if (id != null){
-            this.clienteDAO.deleteOne(id);
+            this.clienteService.deleteOne(id);
         }
         return "redirect:/listar";
     }
