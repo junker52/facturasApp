@@ -59,7 +59,8 @@
                 <small th:if="${#fields.hasErrors('createAt')}" th:errors="*{createAt}" class="form-text text-danger"></small></div>
             </div>
             <div class="form-group row">
-                <div class="col-sm-6"><input type="submit" class="btn btn-primary" value="Crear cliente"></div>
+                <div class="col-sm-6" th:if="${cliente.id != null && cliente.id > 0 }"><input type="submit" class="btn btn-primary" value="Editar cliente"></div>
+                <div class="col-sm-6" th:if="${cliente.id == null || cliente.id == 0 }"><input type="submit" class="btn btn-primary" value="Crear cliente"></div>
             </div>
     </form>
 </div>
