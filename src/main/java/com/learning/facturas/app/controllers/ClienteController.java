@@ -65,4 +65,12 @@ public class ClienteController {
         model.addAttribute("titulo","Formulario de cliente");
         return "form";
     }
+
+    @RequestMapping(value = "/delete/{id}")
+    public String eliminar(@PathVariable(value = "id") Long id){
+        if (id != null){
+            this.clienteDAO.deleteOne(id);
+        }
+        return "redirect:/listar";
+    }
 }

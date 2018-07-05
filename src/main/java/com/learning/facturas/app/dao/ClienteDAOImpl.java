@@ -34,8 +34,17 @@ public class ClienteDAOImpl implements ClienteDAO {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Cliente findOne(Long id) {
         return entityManager.find(Cliente.class, id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteOne(Long id) {
+        Cliente cliente = this.findOne(id);
+        if (cliente != null){
+            this.entityManager.remove(cliente);
+        }
     }
 }
