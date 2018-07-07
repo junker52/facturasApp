@@ -10,9 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 
@@ -45,10 +50,24 @@ public class ClienteController {
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public String guardar(@Valid Cliente cliente, BindingResult bindingResult, Model model, SessionStatus sessionStatus, RedirectAttributes redirectAttributes){
+    public String guardar(@Valid Cliente cliente, BindingResult bindingResult,
+                          Model model, SessionStatus sessionStatus,
+                          RedirectAttributes redirectAttributes, @RequestParam("file")MultipartFile foto){
         if (bindingResult.hasErrors()){
             model.addAttribute("titulo","Formulario de cliente");
             return "form";
+        }
+        if (!foto.isEmpty()){
+            Path recursos = Paths.get("src//main//resources//static//uploads");
+            String rootPath = recursos.toFile().getAbsolutePath();
+            try {
+                byte[] imageBytes = foto.getBytes();
+                Path completePath = Paths.get(rootPath+"//"+foto.getOriginalFilename());
+                Files.write(completePath,imageBytes);
+                cliente.setFoto(foto.getOriginalFilename());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         if (cliente.getId() != null){
             redirectAttributes.addFlashAttribute("success", "Modificado con Exito");
