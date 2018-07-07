@@ -69,6 +69,20 @@ public class ClienteController {
             model.addAttribute("titulo","Formulario de cliente");
             return "form";
         }
+
+        this.guardarFoto(foto,cliente);
+
+        if (cliente.getId() != null){
+            redirectAttributes.addFlashAttribute("success", "Modificado con Exito");
+        } else {
+            redirectAttributes.addFlashAttribute("success", "Creado con Exito");
+        }
+        this.clienteService.save(cliente);
+        sessionStatus.setComplete();
+        return "redirect:/listar";
+    }
+
+    private void guardarFoto(MultipartFile foto, Cliente cliente){
         if (!foto.isEmpty()){
             Path recursos = Paths.get("src//main//resources//static//uploads");
             String rootPath = recursos.toFile().getAbsolutePath();
@@ -81,14 +95,6 @@ public class ClienteController {
                 e.printStackTrace();
             }
         }
-        if (cliente.getId() != null){
-            redirectAttributes.addFlashAttribute("success", "Modificado con Exito");
-        } else {
-            redirectAttributes.addFlashAttribute("success", "Creado con Exito");
-        }
-        this.clienteService.save(cliente);
-        sessionStatus.setComplete();
-        return "redirect:/listar";
     }
 
     @RequestMapping(value = "/form/{id}")
