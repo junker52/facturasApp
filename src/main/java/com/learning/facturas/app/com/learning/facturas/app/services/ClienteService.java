@@ -1,6 +1,7 @@
 package com.learning.facturas.app.com.learning.facturas.app.services;
 
 import com.learning.facturas.app.models.Cliente;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface ClienteService {
     Cliente findOne(Long id);
 
     void deleteOne(Long id);
+
+    Page<Cliente> getPage(int pageNumber);
 }
