@@ -41,6 +41,18 @@ public class ClienteController {
         return "listar";
     }
 
+    @RequestMapping(value = "/ver/{id}", method = RequestMethod.GET)
+    public String ver(@PathVariable(value = "id", required = true) Long id, Model model, RedirectAttributes redirectAttributes){
+        Cliente cliente = this.clienteService.findOne(id);
+        if (cliente == null){
+            redirectAttributes.addFlashAttribute("danger", "No se encuentra el cliente");
+            return "redirect:/listar";
+        }
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("titulo", "Detalle del cliente "+cliente.getId().intValue());
+        return "ver";
+    }
+
     @RequestMapping(value = "/form")
     public String crear(Map<String, Object> model){
         model.put("titulo","Formulario de cliente");
