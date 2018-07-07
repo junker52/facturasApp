@@ -84,8 +84,9 @@ public class ClienteController {
 
     private void guardarFoto(MultipartFile foto, Cliente cliente){
         if (!foto.isEmpty()){
-            Path recursos = Paths.get("src//main//resources//static//uploads");
-            String rootPath = recursos.toFile().getAbsolutePath();
+            //Path recursos = Paths.get("src//main//resources//static//uploads");
+            //String rootPath = recursos.toFile().getAbsolutePath();
+            String rootPath = "C://temp//uploads"; //ResourceHandler added
             try {
                 byte[] imageBytes = foto.getBytes();
                 Path completePath = Paths.get(rootPath+"//"+foto.getOriginalFilename());
