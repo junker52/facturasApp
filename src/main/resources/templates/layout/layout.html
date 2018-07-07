@@ -7,6 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <title th:text="${titulo}">Insert title</title>
 </head>
@@ -32,6 +33,16 @@
 <div class="alert alert-danger" th:if="${danger != null}" th:text="${danger}"></div>
 </header>
 
+<nav th:fragment="pagination-nav">
+    <ul class="pagination">
+        <li class="page-item" th:if="${paginator.hasPrevious}">
+            <a class="page-link" th:href="@{/listar(page=${paginator.actualPage})}" tabindex="-1"><span class="fa fa-arrow-left text-dark" aria-hidden="true"></span></a>
+        </li>
+        <li class="page-item" th:if="${paginator.hasNext}">
+            <a class="page-link" th:href="@{/listar(page=${paginator.actualPage + 2})}"><span class="fa fa-arrow-right text-dark" aria-hidden="true"></span></a>
+        </li>
+    </ul>
+</nav>
 
 
 <footer th:fragment="footer"

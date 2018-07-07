@@ -1,15 +1,14 @@
 package com.learning.facturas.app.controllers;
 
 import com.learning.facturas.app.com.learning.facturas.app.services.ClienteService;
+import com.learning.facturas.app.com.learning.facturas.app.utils.PaginatorHelper;
 import com.learning.facturas.app.models.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -28,9 +27,12 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @RequestMapping(value = "/listar", method = RequestMethod.GET)
-    public String listar(Model model){
+    public String listar(@RequestParam(name = "page", defaultValue = "1") int pageNumber, Model model){
         model.addAttribute("titulo","Listado de Clientes");
-        model.addAttribute("clientes",this.clienteService.findAll());
+        Page<Cliente> page = this.clienteService.getPage(pageNumber);
+        PaginatorHelper paginatorHelper = new PaginatorHelper(page);
+        model.addAttribute("clientesList",page.getContent());
+        model.addAttribute("paginator", paginatorHelper);
         return "listar";
     }
 

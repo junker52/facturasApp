@@ -23,7 +23,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="cliente: ${clientes}">
+                    <tr th:each="cliente: ${clientesList}">
                         <td th:text="${cliente.id}"></td>
                         <td th:text="${cliente.nombre}"></td>
                         <td th:text="${cliente.apellido}"></td>
@@ -34,6 +34,7 @@
                     </tr>
                     </tbody>
                 </table>
+            <nav th:replace="layout/layout :: pagination-nav"></nav>
         </div>
     </div>
 </div>
