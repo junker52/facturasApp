@@ -3,6 +3,8 @@ package com.learning.facturas.app.controllers;
 import com.learning.facturas.app.com.learning.facturas.app.services.ClienteService;
 import com.learning.facturas.app.com.learning.facturas.app.utils.PaginatorHelper;
 import com.learning.facturas.app.models.Cliente;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -30,6 +33,8 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping(value = "/listar", method = RequestMethod.GET)
     public String listar(@RequestParam(name = "page", defaultValue = "1") int pageNumber, Model model){
@@ -86,12 +91,18 @@ public class ClienteController {
         if (!foto.isEmpty()){
             //Path recursos = Paths.get("src//main//resources//static//uploads");
             //String rootPath = recursos.toFile().getAbsolutePath();
-            String rootPath = "C://temp//uploads"; //ResourceHandler added
+            //String rootPath = "C://temp//uploads"; //ResourceHandler added
+            String uniqueFilename = UUID.randomUUID().toString()+"_"+foto.getOriginalFilename();
+            Path rootPath = Paths.get("uploads").resolve(uniqueFilename);
+            Path rootAbsolutePath = rootPath.toAbsolutePath();
             try {
-                byte[] imageBytes = foto.getBytes();
-                Path completePath = Paths.get(rootPath+"//"+foto.getOriginalFilename());
-                Files.write(completePath,imageBytes);
-                cliente.setFoto(foto.getOriginalFilename());
+                //byte[] imageBytes = foto.getBytes();
+                //Path completePath = Paths.get(rootPath+"//"+foto.getOriginalFilename());
+                //Files.write(completePath,imageBytes);
+                Files.copy(foto.getInputStream(),rootAbsolutePath);
+                this.log.info("Saved "+uniqueFilename+" in "+rootAbsolutePath.toString());
+                //cliente.setFoto(foto.getOriginalFilename());
+                cliente.setFoto(uniqueFilename);
             } catch (IOException e) {
                 e.printStackTrace();
             }
