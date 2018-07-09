@@ -1,8 +1,9 @@
 package com.learning.facturas.app.controllers;
 
-import com.learning.facturas.app.com.learning.facturas.app.services.ClienteService;
-import com.learning.facturas.app.com.learning.facturas.app.utils.PaginatorHelper;
 import com.learning.facturas.app.models.Cliente;
+import com.learning.facturas.app.services.ClienteService;
+import com.learning.facturas.app.services.UploadPictureService;
+import com.learning.facturas.app.utils.PaginatorHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
-import java.util.UUID;
 
 
 /**
@@ -31,10 +29,16 @@ import java.util.UUID;
 @SessionAttributes("cliente")
 public class ClienteController {
 
+    private final Path UPLOAD_IMAGES_PATH = Paths.get("uploads");
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private ClienteService clienteService;
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private UploadPictureService uploadPictureService;
+
 
     @RequestMapping(value = "/listar", method = RequestMethod.GET)
     public String listar(@RequestParam(name = "page", defaultValue = "1") int pageNumber, Model model){
@@ -75,7 +79,8 @@ public class ClienteController {
             return "form";
         }
 
-        this.guardarFoto(foto,cliente);
+        this.uploadPictureService.delete(cliente);
+        this.uploadPictureService.loadPicture(cliente, foto);
 
         if (cliente.getId() != null){
             redirectAttributes.addFlashAttribute("success", "Modificado con Exito");
@@ -85,28 +90,6 @@ public class ClienteController {
         this.clienteService.save(cliente);
         sessionStatus.setComplete();
         return "redirect:/listar";
-    }
-
-    private void guardarFoto(MultipartFile foto, Cliente cliente){
-        if (!foto.isEmpty()){
-            //Path recursos = Paths.get("src//main//resources//static//uploads");
-            //String rootPath = recursos.toFile().getAbsolutePath();
-            //String rootPath = "C://temp//uploads"; //ResourceHandler added
-            String uniqueFilename = UUID.randomUUID().toString()+"_"+foto.getOriginalFilename();
-            Path rootPath = Paths.get("uploads").resolve(uniqueFilename);
-            Path rootAbsolutePath = rootPath.toAbsolutePath();
-            try {
-                //byte[] imageBytes = foto.getBytes();
-                //Path completePath = Paths.get(rootPath+"//"+foto.getOriginalFilename());
-                //Files.write(completePath,imageBytes);
-                Files.copy(foto.getInputStream(),rootAbsolutePath);
-                this.log.info("Saved "+uniqueFilename+" in "+rootAbsolutePath.toString());
-                //cliente.setFoto(foto.getOriginalFilename());
-                cliente.setFoto(uniqueFilename);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @RequestMapping(value = "/form/{id}")
@@ -127,7 +110,8 @@ public class ClienteController {
     @RequestMapping(value = "/delete/{id}")
     public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes redirectAttributes){
         if (id != null){
-            this.clienteService.deleteOne(id);
+            Cliente cliente = this.clienteService.deleteOne(id);
+            this.uploadPictureService.delete(cliente);
         }
         redirectAttributes.addFlashAttribute("success", "Cliente eliminado con exito");
         return "redirect:/listar";

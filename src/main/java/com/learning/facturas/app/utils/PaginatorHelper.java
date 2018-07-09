@@ -1,4 +1,4 @@
-package com.learning.facturas.app.com.learning.facturas.app.utils;
+package com.learning.facturas.app.utils;
 
 import org.springframework.data.domain.Page;
 

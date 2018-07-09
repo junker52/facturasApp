@@ -1,4 +1,4 @@
-package com.learning.facturas.app.com.learning.facturas.app.services;
+package com.learning.facturas.app.services;
 
 import com.learning.facturas.app.dao.ClienteDAO;
 import com.learning.facturas.app.models.Cliente;
@@ -43,9 +43,10 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public void deleteOne(Long id) {
+    public Cliente deleteOne(Long id) {
         Cliente cliente = this.findOne(id);
         this.clienteDAO.delete(cliente);
+        return cliente;
     }
 
     @Override
