@@ -2,7 +2,9 @@ package com.learning.facturas.app.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Ricard on 09/07/2018.
@@ -23,6 +25,15 @@ public class Factura implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Cliente cliente;
+
+    //Al ser unidireccional, hay que indicar la columna de foreignkey de la otra tabla
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "factura_id")
+    private List<ItemFactura> items;
+
+    public Factura() {
+        this.items = new ArrayList<ItemFactura>();
+    }
 
     public Long getId() {
         return id;
@@ -62,6 +73,18 @@ public class Factura implements Serializable {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public List<ItemFactura> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemFactura> items) {
+        this.items = items;
+    }
+
+    public void addItemFactura(ItemFactura itemFactura) {
+        this.items.add(itemFactura);
     }
 
     @PrePersist
