@@ -17,4 +17,8 @@ public interface UploadPictureService {
 
     void delete(Cliente cliente);
 
+    void deleteAll();
+
+    void init() throws IOException;
+
 }

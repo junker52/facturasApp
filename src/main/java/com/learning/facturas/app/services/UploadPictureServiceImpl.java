@@ -4,6 +4,7 @@ import com.learning.facturas.app.models.Cliente;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -61,5 +62,15 @@ public class UploadPictureServiceImpl implements UploadPictureService {
                 foto.delete();
             }
         }
+    }
+
+    @Override
+    public void deleteAll() {
+        FileSystemUtils.deleteRecursively(UPLOAD_IMAGES_PATH.toFile());
+    }
+
+    @Override
+    public void init() throws IOException {
+        Files.createDirectories(UPLOAD_IMAGES_PATH);
     }
 }
