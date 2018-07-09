@@ -16,12 +16,25 @@ public class ItemFactura implements Serializable {
 
     private Integer cantidad;
 
+    //Al ser unidireccional el campo foraneo en ItemFactura se crea automatico
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "producto_id")
+    private Producto producto;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public Integer getCantidad() {
@@ -32,7 +45,7 @@ public class ItemFactura implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public Long calcularImporte() {
-        return null;
+    public Double calcularImporte() {
+        return cantidad.doubleValue() * producto.getPrecio();
     }
 }

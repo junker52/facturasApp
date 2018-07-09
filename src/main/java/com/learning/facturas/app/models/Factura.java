@@ -21,6 +21,7 @@ public class Factura implements Serializable {
     private String observacion;
 
     @Temporal(TemporalType.DATE)
+    @Column(name = "create_at")
     private Date createAt;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -85,6 +86,14 @@ public class Factura implements Serializable {
 
     public void addItemFactura(ItemFactura itemFactura) {
         this.items.add(itemFactura);
+    }
+
+    public Double getTotal() {
+        Double total = 0.0;
+        for (int i = 0; i > items.size(); i++) {
+            total += items.get(i).calcularImporte();
+        }
+        return total;
     }
 
     @PrePersist
