@@ -1,7 +1,9 @@
 package com.learning.facturas.app.services;
 
 import com.learning.facturas.app.dao.ClienteDAO;
+import com.learning.facturas.app.dao.ProductoDAO;
 import com.learning.facturas.app.models.Cliente;
+import com.learning.facturas.app.models.Producto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -16,11 +18,13 @@ import java.util.List;
 public class ClienteServiceImpl implements ClienteService {
 
     private ClienteDAO clienteDAO;
+    private ProductoDAO productoDAO;
 
     private final static int PAGESIZE = 5;
 
-    public ClienteServiceImpl(ClienteDAO clienteDAO) {
+    public ClienteServiceImpl(ClienteDAO clienteDAO, ProductoDAO productoDAO) {
         this.clienteDAO = clienteDAO;
+        this.productoDAO = productoDAO;
     }
 
     @Override
@@ -55,6 +59,11 @@ public class ClienteServiceImpl implements ClienteService {
         Page<Cliente> clientePage = this.clienteDAO.findAll(request);
         clientePage.getNumber();
         return clientePage;
+    }
+
+    @Override
+    public List<Producto> findByNombre(String nombre) {
+        return this.productoDAO.findByNombre(nombre);
     }
 
 

@@ -2,15 +2,16 @@ package com.learning.facturas.app.controllers;
 
 import com.learning.facturas.app.models.Cliente;
 import com.learning.facturas.app.models.Factura;
+import com.learning.facturas.app.models.Producto;
 import com.learning.facturas.app.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 /**
  * Created by Ricard on 11/07/2018.
@@ -36,4 +37,11 @@ public class FacturaController {
         model.addAttribute("titulo", "Crear Factura");
         return "factura/form";
     }
+
+    @GetMapping(value = "/cargar-productos/{nombre}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    List<Producto> cargarProductos(@PathVariable("nombre") String nombre) {
+        return this.clienteService.findByNombre(nombre);
+    }
+
 }
