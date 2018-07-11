@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head">
+<body>
+<header th:replace="layout/layout :: header"></header>
+<div class="container my-5">
+    <div class="card">
+        <div class="card-header" th:text="${titulo}"></div>
+        <div class="card-body">
+            <h4 class="card-title">
+                <a th:href="@{'/ver/'+${factura.cliente.id}}" th:text="'Volver'" class="btn btn-info btn-xs"></a>
+            </h4>
+            <!-- Errors on top -->
+            <!--
+            <div th:object="${factura}" th:remove="tag">
+                <ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                </ul>
+            </div>
+            -->
+
+            <form th:action="@{/factura/form}" th:object="${factura}" method="POST">
+
+                <div class="form-group row"><label class="col-sm-2 col-form-label">Cliente</label>
+                    <div class="col-sm-6"><input type="text" class="form-control"
+                                                 th:value="${factura.cliente.nombre}+' '+${factura.cliente.apellido}"
+                                                 disabled="disabled">
+                    </div>
+                </div>
+
+                <div class="form-group row"><label class="col-sm-2 col-form-label">Descripción</label>
+                    <div class="col-sm-6"><input type="text" class="form-control"
+                                                 th:errorclass="'form-control alert-danger'" th:field="*{descripcion}">
+                        <small th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"
+                               class="form-text text-danger"></small>
+                    </div>
+                </div>
+                <div class="form-group row"><label class="col-sm-2 col-form-label">Observaciones</label>
+                    <div class="col-sm-6"><textarea class="form-control" th:field="*{observacion}"
+                                                    th:errorclass="'form-control alert-danger'"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-6"><input type="submit" class="btn btn-secondary" value="Crear factura"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>
