@@ -17,7 +17,7 @@
                             return {
                                 value: item.id,
                                 label: item.nombre,
-                                precion: item.precio,
+                                precio: item.precio,
                             }
                         }));
                     }
@@ -25,7 +25,15 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                $("#buscar_productos").val(ui.item.label);
+
+                //Obtenemos linea de la tabla-plantilla
+                var linea = $("#plantillaItemsFactura").html();
+                //Cambiamos valores de la linia
+                linea = linea.replace(/{ID}/g, ui.item.value);
+                linea = linea.replace(/{NOMBRE}/g, ui.item.label);
+                linea = linea.replace(/{PRECIO}/g, ui.item.precio);
+                //Insertamos en la tabla que se muestra
+                $("#cargarItemProductos tbody").append(linea);
                 return false;
             }
         });

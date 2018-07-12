@@ -1,3 +1,4 @@
+-- @formatter:off
 -- clientes
 INSERT INTO clientes (nombre, apellido, email, create_at, foto) VALUES ('Ricard', 'Pepe', 'abc@gmail.com', '2018-03-10', '');
 INSERT INTO clientes (nombre, apellido, email, create_at, foto)
@@ -88,4 +89,5 @@ INSERT INTO facturas_items (cantidad, producto_id, factura_id) VALUES (2, 1, 4);
 INSERT INTO facturas_items (cantidad, producto_id, factura_id) VALUES (2, 2, 4);
 INSERT INTO facturas_items (cantidad, producto_id, factura_id) VALUES (5, 4, 4);
 
+-- @formatter:on
 
