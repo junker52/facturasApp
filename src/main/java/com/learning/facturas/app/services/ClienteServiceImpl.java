@@ -1,8 +1,10 @@
 package com.learning.facturas.app.services;
 
 import com.learning.facturas.app.dao.ClienteDAO;
+import com.learning.facturas.app.dao.FacturaDAO;
 import com.learning.facturas.app.dao.ProductoDAO;
 import com.learning.facturas.app.models.Cliente;
+import com.learning.facturas.app.models.Factura;
 import com.learning.facturas.app.models.Producto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,12 +21,14 @@ public class ClienteServiceImpl implements ClienteService {
 
     private ClienteDAO clienteDAO;
     private ProductoDAO productoDAO;
+    private FacturaDAO facturaDAO;
 
     private final static int PAGESIZE = 5;
 
-    public ClienteServiceImpl(ClienteDAO clienteDAO, ProductoDAO productoDAO) {
+    public ClienteServiceImpl(ClienteDAO clienteDAO, ProductoDAO productoDAO, FacturaDAO facturaDAO) {
         this.clienteDAO = clienteDAO;
         this.productoDAO = productoDAO;
+        this.facturaDAO = facturaDAO;
     }
 
     @Override
@@ -54,6 +58,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    @Transactional
     public Page<Cliente> getPage(int pageNumber) {
         PageRequest request = PageRequest.of(pageNumber - 1, PAGESIZE);
         Page<Cliente> clientePage = this.clienteDAO.findAll(request);
@@ -62,8 +67,21 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Producto> findByNombre(String nombre) {
         return this.productoDAO.findByNombre(nombre);
+    }
+
+    @Override
+    @Transactional
+    public void saveFactura(Factura factura) {
+        this.facturaDAO.save(factura);
+    }
+
+    @Override
+    @Transactional
+    public Producto findProductoById(Long id) {
+        return this.productoDAO.findById(id).orElse(new Producto());
     }
 
 

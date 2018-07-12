@@ -43,6 +43,12 @@
                 return false;
             }
         });
+
+        //IMPORTANTE: Eliminamos la plantilla antes de enviar
+        $("form").submit(function () {
+            $("#plantillaItemsFactura").remove();
+            return;
+        });
     });
 
     var itemsHelper = {

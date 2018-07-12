@@ -2,13 +2,17 @@ package com.learning.facturas.app.controllers;
 
 import com.learning.facturas.app.models.Cliente;
 import com.learning.facturas.app.models.Factura;
+import com.learning.facturas.app.models.ItemFactura;
 import com.learning.facturas.app.models.Producto;
 import com.learning.facturas.app.services.ClienteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -23,6 +27,8 @@ public class FacturaController {
 
     @Autowired
     private ClienteService clienteService;
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/form/{cliente_id}")
     public String crear(@PathVariable(value = "cliente_id") Long cliente_id, Model model, RedirectAttributes redirectAttributes) {
@@ -42,6 +48,26 @@ public class FacturaController {
     public @ResponseBody
     List<Producto> cargarProductos(@PathVariable("nombre") String nombre) {
         return this.clienteService.findByNombre(nombre);
+    }
+
+    @PostMapping("/form")
+    public String guardar(Factura factura,
+                          @RequestParam(value = "item_id[]", required = false) Long[] itemId,
+                          @RequestParam(value = "cantidad[]", required = false) Integer[] cantidad,
+                          RedirectAttributes redirectAttributes,
+                          SessionStatus sessionStatus) {
+        for (int i = 0; i < itemId.length; i++) {
+            Producto producto = this.clienteService.findProductoById(itemId[i]);
+            ItemFactura linea = new ItemFactura();
+            linea.setCantidad(cantidad[i]);
+            linea.setProducto(producto);
+            factura.addItemFactura(linea);
+        }
+        log.info("Agregamos a factura " + itemId.length + " lineas ");
+        this.clienteService.saveFactura(factura);
+        sessionStatus.setComplete();
+        redirectAttributes.addFlashAttribute("success", "Factura creada con éxito");
+        return "redirect:/ver/" + factura.getCliente().getId();
     }
 
 }

@@ -24,7 +24,7 @@ public class Factura implements Serializable {
     @Column(name = "create_at")
     private Date createAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Cliente cliente;
 
     //Al ser unidireccional, hay que indicar la columna de foreignkey de la otra tabla
