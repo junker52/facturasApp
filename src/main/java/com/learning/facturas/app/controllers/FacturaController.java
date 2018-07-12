@@ -89,7 +89,7 @@ public class FacturaController {
             return "redirect:/listar";
         }
         model.addAttribute("factura", factura);
-        model.addAttribute("titulo", "Ver Factura " + factura.getId());
+        model.addAttribute("titulo", "Ver Factura " + factura.getId().toString());
         return "factura/ver";
     }
 
