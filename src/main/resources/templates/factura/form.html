@@ -38,6 +38,8 @@
                 <div class="form-group row"><label class="col-sm-2 col-form-label">Observaciones</label>
                     <div class="col-sm-6"><textarea class="form-control" th:field="*{observacion}"
                                                     th:errorclass="'form-control alert-danger'"></textarea>
+                        <small th:if="${#fields.hasErrors('observacion')}" th:errors="*{observacion}"
+                               class="form-text text-danger"></small>
                     </div>
                 </div>
                 <div class="form-group row"><label class="col-sm-2 col-form-label" th:text="'Buscar Producto'"></label>
