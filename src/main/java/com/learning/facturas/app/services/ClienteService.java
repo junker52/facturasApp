@@ -27,4 +27,6 @@ public interface ClienteService {
     void saveFactura(Factura factura);
 
     Producto findProductoById(Long id);
+
+    Factura findFacturaById(Long id);
 }
