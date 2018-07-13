@@ -3,7 +3,7 @@ package com.learning.facturas.app.dao;
 import com.learning.facturas.app.models.Cliente;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
@@ -23,4 +23,8 @@ public interface ClienteDAO extends PagingAndSortingRepository<Cliente, Long> {
     Optional<Cliente> findById(Long id);
 
     void delete(Cliente cliente);
+
+    //Cliente - Facturas requiere un left outer join para que un cliente sin facturas se muestre
+    @Query("select c from Cliente c left join fetch c.facturas f where c.id=?1")
+    Cliente fetchByIdWithFacturas(Long id);
 }

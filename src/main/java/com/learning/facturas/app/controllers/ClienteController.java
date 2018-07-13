@@ -52,7 +52,7 @@ public class ClienteController {
 
     @RequestMapping(value = "/ver/{id}", method = RequestMethod.GET)
     public String ver(@PathVariable(value = "id", required = true) Long id, Model model, RedirectAttributes redirectAttributes){
-        Cliente cliente = this.clienteService.findOne(id);
+        Cliente cliente = this.clienteService.fetchByIdWithFacturas(id);
         if (cliente == null){
             redirectAttributes.addFlashAttribute("danger", "No se encuentra el cliente");
             return "redirect:/listar";
