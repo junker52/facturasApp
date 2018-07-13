@@ -7,16 +7,7 @@
     <div class="card border-primary">
         <div class="card-header" th:text="'Iniciar Session'"></div>
         <div class="card-body">
-            <!-- Errors on top -->
-            <!--
-            <div th:object="${cliente}" th:remove="tag">
-                <ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
-                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-                </ul>
-            </div>
-            -->
-
-            <form th:action="@{/login}" method="POST" enctype="multipart/form-data">
+            <form th:action="@{/login}" method="POST">
                 <div class="form-group row">
                     <div class="col-sm-6"><input type="text" class="form-control" name="username" id="username"
                                                  placeholder="username" required autofocus>
