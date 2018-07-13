@@ -40,7 +40,7 @@ public class ClienteController {
     private UploadPictureService uploadPictureService;
 
 
-    @RequestMapping(value = "/listar", method = RequestMethod.GET)
+    @RequestMapping(value = {"/listar", "/"}, method = RequestMethod.GET)
     public String listar(@RequestParam(name = "page", defaultValue = "1") int pageNumber, Model model){
         model.addAttribute("titulo","Listado de Clientes");
         Page<Cliente> page = this.clienteService.getPage(pageNumber);
