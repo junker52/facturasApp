@@ -93,4 +93,19 @@ public class FacturaController {
         return "factura/ver";
     }
 
+
+    @GetMapping("/eliminar/{id}")
+    public String delete(@PathVariable(value = "id") Long id, RedirectAttributes redirectAttributes) {
+        Factura factura = this.clienteService.findFacturaById(id);
+        if (factura != null) {
+            this.clienteService.deleteFactura(id);
+            redirectAttributes.addFlashAttribute("success", "Factura eliminada OK");
+            return "redirect:/ver/" + factura.getCliente().getId();
+        } else {
+            redirectAttributes.addFlashAttribute("danger", "Factura inexistente KO");
+            return "redirect:/listar";
+        }
+
+    }
+
 }
