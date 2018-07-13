@@ -15,13 +15,16 @@ import java.security.Principal;
 public class LoginController {
 
     @GetMapping("/login")
-    public String login(@RequestParam(value = "error", required = false) String error, Model model, Principal principal, RedirectAttributes redirectAttributes) {
+    public String login(@RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout, Model model, Principal principal, RedirectAttributes redirectAttributes) {
         if (principal != null) {
             redirectAttributes.addFlashAttribute("success", "Sessión ya iniciada");
             return "redirect:/";
         }
         if (error != null) {
             model.addAttribute("danger", "Login incorrecto");
+        }
+        if (logout != null) {
+            model.addAttribute("success", "Logout correcto");
         }
         return "login";
     }
