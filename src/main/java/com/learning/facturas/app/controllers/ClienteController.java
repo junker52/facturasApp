@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
@@ -64,6 +65,7 @@ public class ClienteController {
         return "listar";
     }
 
+    @Secured(value = {"ROLE_ADMIN", "ROLE_USER"})
     @RequestMapping(value = "/ver/{id}", method = RequestMethod.GET)
     public String ver(@PathVariable(value = "id", required = true) Long id, Model model, RedirectAttributes redirectAttributes){
         Cliente cliente = this.clienteService.fetchByIdWithFacturas(id);
@@ -76,6 +78,7 @@ public class ClienteController {
         return "ver";
     }
 
+    @Secured(value = "ROLE_ADMIN")
     @RequestMapping(value = "/form")
     public String crear(Map<String, Object> model){
         model.put("titulo","Formulario de cliente");
@@ -84,6 +87,7 @@ public class ClienteController {
         return "form";
     }
 
+    @Secured(value = "ROLE_ADMIN")
     @RequestMapping(value = "/form", method = RequestMethod.POST)
     public String guardar(@Valid Cliente cliente, BindingResult bindingResult,
                           Model model, SessionStatus sessionStatus,
@@ -106,6 +110,7 @@ public class ClienteController {
         return "redirect:/listar";
     }
 
+    @Secured(value = "ROLE_ADMIN")
     @RequestMapping(value = "/form/{id}")
     public String editar(@PathVariable(value = "id") Long id, Model model, RedirectAttributes redirectAttributes){
         Cliente cliente = null;
@@ -121,6 +126,7 @@ public class ClienteController {
         return "form";
     }
 
+    @Secured(value = "ROLE_ADMIN")
     @RequestMapping(value = "/delete/{id}")
     public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes redirectAttributes){
         if (id != null){
