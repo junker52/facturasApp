@@ -9,6 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -21,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Map;
 
 
@@ -47,6 +52,9 @@ public class ClienteController {
 
         if (!ObjectUtils.isEmpty(authentication)) {
             this.log.info(String.format("El usuario %s ha iniciado sesion", authentication.getName()));
+        }
+        if (this.hasRole("ROLE_ADMIN")) {
+            this.log.info("Acceso de ADMIN");
         }
 
         //Obtener el Authentication en cualquier punto de la aplicación
@@ -124,5 +132,26 @@ public class ClienteController {
         }
         redirectAttributes.addFlashAttribute("success", "Cliente eliminado con exito");
         return "redirect:/listar";
+    }
+
+    private boolean hasRole(String roleName) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        if (context == null) {
+            return false;
+        }
+        Authentication authentication = context.getAuthentication();
+        if (authentication == null) {
+            return false;
+        }
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        /*
+        for ( GrantedAuthority authority : authorities){
+            if (roleName.equalsIgnoreCase(authority.getAuthority())){
+                return true;
+            }
+        }
+        return false;
+        */
+        return authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 }
