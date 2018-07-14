@@ -1,5 +1,6 @@
 package com.learning.facturas.app;
 
+import com.learning.facturas.app.auth.LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,6 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
 
     @Autowired
     public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception {
@@ -38,7 +42,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/factura/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").permitAll()
+                .formLogin().successHandler(loginSuccessHandler).loginPage("/login").permitAll()
                 .and()
                 .logout().permitAll()
                 .and()
