@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -22,10 +19,10 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.Map;
 
 
@@ -48,12 +45,12 @@ public class ClienteController {
 
 
     @RequestMapping(value = {"/listar", "/"}, method = RequestMethod.GET)
-    public String listar(@RequestParam(name = "page", defaultValue = "1") int pageNumber, Model model, Authentication authentication) {
+    public String listar(@RequestParam(name = "page", defaultValue = "1") int pageNumber, Model model, Authentication authentication, HttpServletRequest request) {
 
         if (!ObjectUtils.isEmpty(authentication)) {
             this.log.info(String.format("El usuario %s ha iniciado sesion", authentication.getName()));
         }
-        if (this.hasRole("ROLE_ADMIN")) {
+        if (this.hasRole("ROLE_ADMIN", request)) {
             this.log.info("Acceso de ADMIN");
         }
 
@@ -134,24 +131,18 @@ public class ClienteController {
         return "redirect:/listar";
     }
 
-    private boolean hasRole(String roleName) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        if (context == null) {
-            return false;
-        }
-        Authentication authentication = context.getAuthentication();
-        if (authentication == null) {
-            return false;
-        }
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        /*
-        for ( GrantedAuthority authority : authorities){
-            if (roleName.equalsIgnoreCase(authority.getAuthority())){
-                return true;
-            }
+    /**
+     * Verifying roles by using @{link {@link SecurityContextHolderAwareRequestWrapper}}
+     *
+     * @param roleName role to verify
+     * @param request  http request
+     * @return true if roles match
+     */
+    private boolean hasRole(String roleName, HttpServletRequest request) {
+        SecurityContextHolderAwareRequestWrapper wrapper = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
+        if (wrapper.isUserInRole(roleName.replace("ROLE_", ""))) {
+            return true;
         }
         return false;
-        */
-        return authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 }
