@@ -3,6 +3,7 @@ package com.learning.facturas.app.auth;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.support.SessionFlashMapManager;
 
@@ -22,7 +23,9 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         //Es la solucion cuando no podemos inyectar RedirectAttributtes
         SessionFlashMapManager flashMapManager = new SessionFlashMapManager();
         FlashMap flashMap = new FlashMap();
-        flashMap.put("success", "Ha iniciado sesión con éxito");
+        if (!ObjectUtils.isEmpty(authentication)) {
+            flashMap.put("success", "El usuario " + authentication.getName() + " ha iniciado sesión con éxito");
+        }
         //Lo registramos
         flashMapManager.saveOutputFlashMap(flashMap, request, response);
         super.onAuthenticationSuccess(request, response, authentication);
