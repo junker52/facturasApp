@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.sql.DataSource;
@@ -31,15 +32,26 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Qualifier("jpaUserDetailsService")
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+
     @Autowired
     public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception {
 
+        //JPA Spring Security Strategy
+        builder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+
+        /*
         //JDBC Spring Security Strategy
         builder.jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(bCryptPasswordEncoder)
                 .usersByUsernameQuery("select username, password, enabled from users where username=?")
                 .authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (a.user_id = u.id) where u.username=?");
+        */
+
         /*
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         User.UserBuilder users = User.builder().passwordEncoder(encoder::encode);
@@ -48,7 +60,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         builder.inMemoryAuthentication()
                 .withUser(users.username("admin").password("123").roles("ADMIN", "USER"))
                 .withUser(users.username("ricard").password("123").roles("USER"));
-                */
+        */
     }
 
     @Override

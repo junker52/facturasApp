@@ -53,11 +53,21 @@ INSERT INTO facturas_items (cantidad, producto_id, factura_id) VALUES (3, 3, 2);
 INSERT INTO facturas (descripcion, observacion, cliente_id, create_at) VALUES ('Factura de prueba 3', 'Observaciones de la factura 3', 2, NOW());
 INSERT INTO facturas_items (cantidad, producto_id, factura_id) VALUES (2, 1, 3);
 INSERT INTO facturas_items (cantidad, producto_id, factura_id) VALUES (2, 2, 3);
+
 INSERT INTO facturas_items (cantidad, producto_id, factura_id) VALUES (5, 4, 3);
 
 INSERT INTO facturas (descripcion, observacion, cliente_id, create_at) VALUES ('Factura de prueba 4', 'Observaciones de la factura 4', 2, NOW());
 INSERT INTO facturas_items (cantidad, producto_id, factura_id) VALUES (2, 1, 4);
 INSERT INTO facturas_items (cantidad, producto_id, factura_id) VALUES (2, 2, 4);
 INSERT INTO facturas_items (cantidad, producto_id, factura_id) VALUES (5, 4, 4);
+
+-- usuarios y roles
+INSERT INTO users (username, password, enabled) VALUES ('user', '$2a$10$RSpHaprVzof98A8/juyjW.TS5mS2Zant8HEd.5dxOhOSkgB.7FZH2', 1);
+INSERT INTO users (username, password, enabled) VALUES ('admin', '$2a$10$ReqybkWLARiLaIKLsBb0jeIU4Ss5dAX51jU.ySSZ2s/ezT/iLwGTS', 1);
+
+INSERT INTO authorities (user_id, authority) VALUES (1,'ROLE_USER');
+INSERT INTO authorities (user_id, authority) VALUES (2,'ROLE_USER');
+INSERT INTO authorities (user_id, authority) VALUES (2,'ROLE_ADMIN');
+
 
 
