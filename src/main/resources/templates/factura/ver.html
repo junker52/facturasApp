@@ -12,6 +12,8 @@
                 <a th:href="@{'/ver/'+${factura.cliente.id}}" th:text="'Volver'"
                    class="btn btn-light btn-xs"></a>
                 <a th:href="@{'/factura/ver/'+${factura.id}(format=pdf)}" th:text="'PDF'"
+                   class="btn btn-info btn-xs float-right mx-2"></a>
+                <a th:href="@{'/factura/ver/'+${factura.id}(format=xlsx)}" th:text="'EXCEL'"
                    class="btn btn-info btn-xs float-right"></a>
             </h4>
 

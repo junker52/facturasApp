@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Created by Ricard on 16/07/2018.
  */
-@Component(value = "factura/ver")
+@Component(value = "factura/ver.pdf")
 public class FacturaPdfView extends AbstractPdfView {
 
     @Override
