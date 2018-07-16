@@ -9,7 +9,12 @@
     <div class="card">
         <div class="card-header" th:text="${titulo}"></div>
         <div class="card-body bg-light">
-            <a th:href="@{/form}" sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-outline-info my-2">Crear</a>
+            <h4 class="card-title">
+                <a th:href="@{/form}" sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-outline-info my-2">Crear</a>
+                <a href="" class="btn btn-xs btn-outline-success float-right mx-2" th:href="@{'/listar'(format=xml)}">XML</a>
+                <a href="" class="btn btn-xs btn-outline-success float-right"
+                   th:href="@{'/listar'(format=json)}">JSON</a>
+            </h4>
                 <table class="table table-striped">
                     <thead>
                     <tr>

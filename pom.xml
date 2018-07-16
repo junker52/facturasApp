@@ -90,6 +90,14 @@
 			<version>3.17</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-oxm -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>4.2.4.RELEASE</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

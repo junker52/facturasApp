@@ -19,6 +19,7 @@ public class ItemFactura implements Serializable {
     //Al ser unidireccional el campo foraneo en ItemFactura se crea automatico
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "producto_id")
+    //@JsonIgnoreProperties -- Para ignorar algunas propiedades del objeto
     private Producto producto;
 
     public Long getId() {

@@ -1,7 +1,10 @@
 package com.learning.facturas.app.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +30,7 @@ public class Factura implements Serializable {
     private Date createAt;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JsonBackReference
     private Cliente cliente;
 
     //Al ser unidireccional, hay que indicar la columna de foreignkey de la otra tabla
@@ -70,6 +74,7 @@ public class Factura implements Serializable {
         this.createAt = createAt;
     }
 
+    @XmlTransient
     public Cliente getCliente() {
         return cliente;
     }

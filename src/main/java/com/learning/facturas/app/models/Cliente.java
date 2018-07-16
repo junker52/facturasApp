@@ -1,5 +1,7 @@
 package com.learning.facturas.app.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -34,12 +36,14 @@ public class Cliente implements Serializable {
     private String foto;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cliente")
+    @JsonManagedReference
     private List<Factura> facturas;
 
     @Column(name = "create_at", nullable = false)
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createAt;
 
     public Cliente() {
