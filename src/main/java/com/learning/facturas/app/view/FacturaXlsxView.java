@@ -1,6 +1,7 @@
 package com.learning.facturas.app.view;
 
 import com.learning.facturas.app.models.Factura;
+import com.learning.facturas.app.models.ItemFactura;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -23,7 +24,7 @@ public class FacturaXlsxView extends AbstractXlsxView {
 
         Factura factura = (Factura) model.get("factura");
 
-        Sheet sheet = workbook.createSheet();
+        Sheet sheet = workbook.createSheet("Factura_" + factura.getId() + "_" + System.currentTimeMillis());
         Row row = sheet.createRow(0);
         Cell cell = row.createCell(0);
         cell.setCellValue("Datos del Cliente");
@@ -40,10 +41,29 @@ public class FacturaXlsxView extends AbstractXlsxView {
         cell = row.createCell(0);
         cell.setCellValue(factura.getCliente().getCreateAt());
 
-        sheet.createRow(4).createCell(0).setCellValue("Datos de factura");
-        sheet.createRow(5).createCell(0).setCellValue("Folio: " + factura.getId());
-        sheet.createRow(6).createCell(0).setCellValue("Descripcion: " + factura.getDescripcion());
-        sheet.createRow(7).createCell(0).setCellValue("Fecha: " + factura.getCreateAt());
+        sheet.createRow(5).createCell(0).setCellValue("Datos de factura");
+        sheet.createRow(6).createCell(0).setCellValue("Folio: " + factura.getId());
+        sheet.createRow(7).createCell(0).setCellValue("Descripcion: " + factura.getDescripcion());
+        sheet.createRow(8).createCell(0).setCellValue("Fecha: " + factura.getCreateAt());
+
+        Row header = sheet.createRow(10);
+        header.createCell(0).setCellValue("Producto");
+        header.createCell(1).setCellValue("Precio");
+        header.createCell(2).setCellValue("Cantidad");
+        header.createCell(3).setCellValue("Total");
+
+        int count = 11;
+        for (ItemFactura item : factura.getItems()) {
+            Row fila = sheet.createRow(count++);
+            fila.createCell(0).setCellValue(item.getProducto().getNombre());
+            fila.createCell(1).setCellValue(item.getProducto().getPrecio());
+            fila.createCell(2).setCellValue(item.getCantidad());
+            fila.createCell(3).setCellValue(item.calcularImporte());
+        }
+
+        Row filaTotal = sheet.createRow(count);
+        filaTotal.createCell(2).setCellValue("Gran Total: ");
+        filaTotal.createCell(3).setCellValue(factura.getTotal());
 
 
     }
